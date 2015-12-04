@@ -15,17 +15,23 @@
 class SquareGame {
 
     // The square
-    field Square square;
+    field Square player1;
+    field Square player2;
     field Circle circle;
 
     // The square's movement direction
-    field int direction; // 0=none,1=up,2=down,3=left,4=right
+    field int player1direction; // 0=none,1=up,2=down,3=left,4=right
+    field int player2direction;
+    field int circle_direction;
 
     /** Constructs a new Square Game. */
     constructor SquareGame new() {
-        let square = Square.new(0, 0, 30);
-        let circle = Circle.new(100, 100, 30);
-        let direction = 0;
+        let player1 = Square.new(20, 200, 50);
+        let player2 = Square.new(480, 200, 50);
+        let circle = Circle.new(200, 200, 20);
+        let player1direction = 0;
+        let player2direction = 0;
+        let circle_direction = 0;
 
         return this;
     }
@@ -49,35 +55,49 @@ class SquareGame {
             // waits for a key to be pressed.
             while (key = 0) {
                 let key = Keyboard.keyPressed();
-                do moveSquare();
+                do moveCircle();
             }
 
             if (key = 81) {
                 let exit = true;
             }
-            if (key = 90) {
-                do square.decSize();
-            }
-            if (key = 88) {
-                do square.incSize();
-            }
+            //if (key = 90) {
+            //    do player1.decSize();
+            //}
+            //if (key = 88) {
+            //    do square.incSize();
+            //}
             if (key = 131) {
-                let direction = 1;
+                let player1direction = 1;
             }
             if (key = 133) {
-                let direction = 2;
+                let player1direction = 2;
             }
-            if (key = 130) {
-                let direction = 3;
+            //if (key = 130) {
+            //    let player1direction = 3;
+            //}
+            //if (key = 132) {
+            //    let player1direction = 4;
+            //}
+            if (key = 87) {
+              let player2direction = 1;
             }
-            if (key = 132) {
-                let direction = 4;
+            if (key = 68) {
+              let player2direction = 2;
             }
+            //if (key = 83) {
+            //  let player2direction = 3;
+            //}
+            //if (key = 65) {
+            //  let player2direction = 4;
+            //}
 
             // waits for the key to be released.
             while (~(key = 0)) {
                 let key = Keyboard.keyPressed();
-                do moveSquare();
+                do movePlayer1();
+                do movePlayer2();
+                do moveCircle();
             }
         }
 
@@ -85,21 +105,41 @@ class SquareGame {
 	}
 
     /** Moves the square by 2 pixels in the current direction. */
-    method void moveSquare() {
-        if (direction = 1) {
-            do square.moveUp();
+    method void movePlayer1() {
+        if (player1direction = 1) {
+            do player1.moveUp();
         }
-        if (direction = 2) {
-            do square.moveDown();
+        if (player1direction = 2) {
+            do player1.moveDown();
         }
-        if (direction = 3) {
-            do square.moveLeft();
-        }
-        if (direction = 4) {
-            do square.moveRight();
-        }
-
-        do Sys.wait(5); // Delays the next movement.
         return;
+    }
+
+    method void movePlayer2() {
+      if (player2direction = 1) {
+          do player2.moveUp();
+      }
+      if (player2direction = 2) {
+          do player2.moveDown();
+      }
+      return;
+    }
+
+    method void moveCircle() {
+      if (circle_direction = 1) {
+        do circle.moveUp();
+      }
+      if (circle_direction = 2) {
+          do circle.moveDown();
+      }
+      if (circle_direction = 3) {
+          do circle.moveLeft();
+      }
+      if (circle_direction = 4) {
+          do circle.moveRight();
+      }
+
+      do Sys.wait(5); // Delays the next movement.
+      return;
     }
 }

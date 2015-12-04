@@ -59,7 +59,7 @@ class Circle {
 
     /** Moves up by 2 pixels. */
     method void moveUp() {
-        if (y > 1) {
+        if (y > (1 + radius)) {
             do Screen.setColor(false);
             do Screen.drawCircle(x, (y + radius) - 1, radius);
             let y = y - 2;
@@ -71,7 +71,7 @@ class Circle {
 
     /** Moves down by 2 pixels. */
     method void moveDown() {
-        if ((y + radius) < 254) {
+        if ((y + radius) < (254 - radius)) {
             do Screen.setColor(false);
             do Screen.drawCircle(x, y, radius);
             let y = y + 2;
@@ -83,7 +83,7 @@ class Circle {
 
     /** Moves left by 2 pixels. */
     method void moveLeft() {
-        if (x > 1) {
+        if (x > (1 + radius)) {
             do Screen.setColor(false);
             do Screen.drawCircle((x + radius) - 1, y, radius);
             let x = x - 2;
@@ -95,7 +95,7 @@ class Circle {
 
     /** Moves right by 2 pixels. */
     method void moveRight() {
-        if ((x + radius) < 510) {
+        if ((x + radius) < (510 - radius)) {
             do Screen.setColor(false);
             do Screen.drawCircle(x, y, radius);
             let x = x + 2;

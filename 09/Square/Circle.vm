@@ -105,6 +105,8 @@ push argument 0
 pop pointer 0
 push this 1
 push constant 1
+push this 2
+add
 gt
 if-goto IF_TRUE0
 goto IF_FALSE0
@@ -144,6 +146,8 @@ push this 1
 push this 2
 add
 push constant 254
+push this 2
+sub
 lt
 if-goto IF_TRUE0
 goto IF_FALSE0
@@ -181,6 +185,8 @@ push argument 0
 pop pointer 0
 push this 0
 push constant 1
+push this 2
+add
 gt
 if-goto IF_TRUE0
 goto IF_FALSE0
@@ -220,6 +226,8 @@ push this 0
 push this 2
 add
 push constant 510
+push this 2
+sub
 lt
 if-goto IF_TRUE0
 goto IF_FALSE0

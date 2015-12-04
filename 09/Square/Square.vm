@@ -32,6 +32,8 @@ push this 0
 push this 1
 push this 0
 push this 2
+push constant 2
+call Math.divide 2
 add
 push this 1
 push this 2
@@ -50,6 +52,8 @@ push this 0
 push this 1
 push this 0
 push this 2
+push constant 2
+call Math.divide 2
 add
 push this 1
 push this 2
@@ -130,6 +134,8 @@ push constant 1
 sub
 push this 0
 push this 2
+push constant 2
+call Math.divide 2
 add
 push this 1
 push this 2
@@ -148,6 +154,8 @@ push this 0
 push this 1
 push this 0
 push this 2
+push constant 2
+call Math.divide 2
 add
 push this 1
 push constant 1
@@ -175,6 +183,8 @@ push this 0
 push this 1
 push this 0
 push this 2
+push constant 2
+call Math.divide 2
 add
 push this 1
 push constant 1
@@ -197,6 +207,8 @@ push constant 1
 sub
 push this 0
 push this 2
+push constant 2
+call Math.divide 2
 add
 push this 1
 push this 2
@@ -226,6 +238,8 @@ sub
 push this 1
 push this 0
 push this 2
+push constant 2
+call Math.divide 2
 add
 push this 1
 push this 2
@@ -293,6 +307,8 @@ sub
 push this 1
 push this 0
 push this 2
+push constant 2
+call Math.divide 2
 add
 push this 1
 push this 2
