@@ -1,4 +1,4 @@
-function Square.new 0
+function Ball.new 0
 push constant 3
 call Memory.alloc 1
 pop pointer 0
@@ -9,11 +9,11 @@ pop this 1
 push argument 2
 pop this 2
 push pointer 0
-call Square.draw 1
+call Ball.draw 1
 pop temp 0
 push pointer 0
 return
-function Square.dispose 0
+function Ball.dispose 0
 push argument 0
 pop pointer 0
 push pointer 0
@@ -21,7 +21,7 @@ call Memory.deAlloc 1
 pop temp 0
 push constant 0
 return
-function Square.draw 0
+function Ball.draw 0
 push argument 0
 pop pointer 0
 push constant 0
@@ -32,8 +32,6 @@ push this 0
 push this 1
 push this 0
 push this 2
-push constant 2
-call Math.divide 2
 add
 push this 1
 push this 2
@@ -42,7 +40,7 @@ call Screen.drawRectangle 4
 pop temp 0
 push constant 0
 return
-function Square.erase 0
+function Ball.erase 0
 push argument 0
 pop pointer 0
 push constant 0
@@ -52,8 +50,6 @@ push this 0
 push this 1
 push this 0
 push this 2
-push constant 2
-call Math.divide 2
 add
 push this 1
 push this 2
@@ -62,69 +58,22 @@ call Screen.drawRectangle 4
 pop temp 0
 push constant 0
 return
-function Square.incSize 0
-push argument 0
-pop pointer 0
-push this 1
-push this 2
-add
-push constant 254
-lt
-push this 0
-push this 2
-add
-push constant 510
-lt
-and
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push pointer 0
-call Square.erase 1
-pop temp 0
-push this 2
-push constant 2
-add
-pop this 2
-push pointer 0
-call Square.draw 1
-pop temp 0
-label IF_FALSE0
-push constant 0
-return
-function Square.decSize 0
-push argument 0
-pop pointer 0
-push this 2
-push constant 2
-gt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push pointer 0
-call Square.erase 1
-pop temp 0
-push this 2
-push constant 2
-sub
-pop this 2
-push pointer 0
-call Square.draw 1
-pop temp 0
-label IF_FALSE0
-push constant 0
-return
-function Square.getX 0
+function Ball.getX 0
 push argument 0
 pop pointer 0
 push this 0
 return
-function Square.getY 0
+function Ball.getY 0
 push argument 0
 pop pointer 0
 push this 1
 return
-function Square.moveUp 0
+function Ball.getSize 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Ball.moveUp 0
 push argument 0
 pop pointer 0
 push this 1
@@ -144,8 +93,6 @@ push constant 1
 sub
 push this 0
 push this 2
-push constant 2
-call Math.divide 2
 add
 push this 1
 push this 2
@@ -153,7 +100,7 @@ add
 call Screen.drawRectangle 4
 pop temp 0
 push this 1
-push constant 2
+push constant 1
 sub
 pop this 1
 push constant 0
@@ -164,8 +111,6 @@ push this 0
 push this 1
 push this 0
 push this 2
-push constant 2
-call Math.divide 2
 add
 push this 1
 push constant 1
@@ -175,7 +120,7 @@ pop temp 0
 label IF_FALSE0
 push constant 0
 return
-function Square.moveDown 0
+function Ball.moveDown 0
 push argument 0
 pop pointer 0
 push this 1
@@ -193,8 +138,6 @@ push this 0
 push this 1
 push this 0
 push this 2
-push constant 2
-call Math.divide 2
 add
 push this 1
 push constant 1
@@ -202,7 +145,7 @@ add
 call Screen.drawRectangle 4
 pop temp 0
 push this 1
-push constant 2
+push constant 1
 add
 pop this 1
 push constant 0
@@ -217,8 +160,6 @@ push constant 1
 sub
 push this 0
 push this 2
-push constant 2
-call Math.divide 2
 add
 push this 1
 push this 2
@@ -228,7 +169,7 @@ pop temp 0
 label IF_FALSE0
 push constant 0
 return
-function Square.moveLeft 0
+function Ball.moveLeft 0
 push argument 0
 pop pointer 0
 push this 0
@@ -248,8 +189,6 @@ sub
 push this 1
 push this 0
 push this 2
-push constant 2
-call Math.divide 2
 add
 push this 1
 push this 2
@@ -257,7 +196,7 @@ add
 call Screen.drawRectangle 4
 pop temp 0
 push this 0
-push constant 2
+push constant 1
 sub
 pop this 0
 push constant 0
@@ -277,7 +216,7 @@ pop temp 0
 label IF_FALSE0
 push constant 0
 return
-function Square.moveRight 0
+function Ball.moveRight 0
 push argument 0
 pop pointer 0
 push this 0
@@ -302,7 +241,7 @@ add
 call Screen.drawRectangle 4
 pop temp 0
 push this 0
-push constant 2
+push constant 1
 add
 pop this 0
 push constant 0
@@ -317,8 +256,6 @@ sub
 push this 1
 push this 0
 push this 2
-push constant 2
-call Math.divide 2
 add
 push this 1
 push this 2

@@ -67,6 +67,14 @@ class Square {
         return;
 	}
 
+    method int getX() {
+      return x;
+    }
+
+    method int getY() {
+      return y;
+    }
+
     /** Moves up by 2 pixels. */
     method void moveUp() {
         if (y > 1) {

@@ -30,32 +30,20 @@ class Circle {
         return;
     }
 
+    method int getX() {
+      return x;
+    }
+
+    method int getY() {
+      return y;
+    }
+
     /** Erases the square from the screen. */
     method void erase() {
         do Screen.setColor(false);
         do Screen.drawCircle(x, y, radius);
         return;
     }
-
-    /** Increments the size by 2 pixels. */
-    method void incSize() {
-        if (((y + radius) < 254) & ((x + radius) < 510)) {
-            do erase();
-            let radius = radius + 2;
-            do draw();
-        }
-        return;
-    }
-
-    /** Decrements the size by 2 pixels. */
-    method void decSize() {
-        if (radius > 2) {
-            do erase();
-            let radius = radius - 2;
-            do draw();
-        }
-        return;
-	}
 
     /** Moves up by 2 pixels. */
     method void moveUp() {

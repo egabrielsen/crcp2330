@@ -16,29 +16,32 @@ class SquareGame {
 
     // The square
     field Square player1;
-    field Square player2;
+    //field Square player2;
     field Circle circle;
+    field Ball ball;
 
     // The square's movement direction
     field int player1direction; // 0=none,1=up,2=down,3=left,4=right
-    field int player2direction;
+    //field int player2direction;
     field int circle_direction;
 
     /** Constructs a new Square Game. */
     constructor SquareGame new() {
-        let player1 = Square.new(20, 200, 50);
-        let player2 = Square.new(480, 200, 50);
-        let circle = Circle.new(200, 200, 20);
+        let player1 = Square.new(20, 100, 30);
+        //let player2 = Square.new(480, 200, 50);
+        let circle = Circle.new(200, 200, 5);
+        let ball = Ball.new(20, 20, 5);
         let player1direction = 0;
-        let player2direction = 0;
-        let circle_direction = 0;
+        //let player2direction = 0;
+        let circle_direction = 1;
 
         return this;
     }
 
     /** Deallocates the object's memory. */
     method void dispose() {
-        do square.dispose();
+        do player1.dispose();
+        do circle.dispose();
         do Memory.deAlloc(this);
         return;
     }
@@ -52,8 +55,10 @@ class SquareGame {
         let exit = false;
 
         while (~exit) {
-            // waits for a key to be pressed.
+            do moveCircle();
+             //waits for a key to be pressed.
             while (key = 0) {
+                do updateDirection();
                 let key = Keyboard.keyPressed();
                 do moveCircle();
             }
@@ -61,48 +66,56 @@ class SquareGame {
             if (key = 81) {
                 let exit = true;
             }
-            //if (key = 90) {
-            //    do player1.decSize();
-            //}
-            //if (key = 88) {
-            //    do square.incSize();
-            //}
             if (key = 131) {
                 let player1direction = 1;
             }
             if (key = 133) {
                 let player1direction = 2;
             }
-            //if (key = 130) {
-            //    let player1direction = 3;
-            //}
-            //if (key = 132) {
-            //    let player1direction = 4;
-            //}
-            if (key = 87) {
-              let player2direction = 1;
-            }
-            if (key = 68) {
-              let player2direction = 2;
-            }
-            //if (key = 83) {
-            //  let player2direction = 3;
-            //}
-            //if (key = 65) {
-            //  let player2direction = 4;
-            //}
+
+            do updateDirection();
 
             // waits for the key to be released.
             while (~(key = 0)) {
+                do updateDirection();
                 let key = Keyboard.keyPressed();
                 do movePlayer1();
-                do movePlayer2();
+                //do movePlayer2();
                 do moveCircle();
             }
         }
 
         return;
 	}
+
+    method void updateDirection() {
+      if ((ball.getX() > 400) & (circle_direction = 1)) {
+        let circle_direction = 4;
+      }
+      if ((ball.getX() > 400) & (circle_direction = 2)) {
+        let circle_direction = 3;
+      }
+      if ((ball.getY() < 30) & (circle_direction = 1)) {
+        let circle_direction = 2;
+      }
+      if ((ball.getY() < 30) & (circle_direction = 4)) {
+        let circle_direction = 3;
+      }
+      if ((ball.getX() < 30) & (circle_direction = 3)) {
+        let circle_direction = 2;
+      }
+      if ((ball.getX() < 30) & (circle_direction = 4)) {
+        let circle_direction = 1;
+      }
+      if ((ball.getY() > (250 - ball.getSize())) & (circle_direction = 3)) {
+        let circle_direction = 4;
+      }
+      if ((ball.getY() > (250 - ball.getSize())) & (circle_direction = 2)) {
+        let circle_direction = 1;
+      }
+
+      return;
+    }
 
     /** Moves the square by 2 pixels in the current direction. */
     method void movePlayer1() {
@@ -112,34 +125,38 @@ class SquareGame {
         if (player1direction = 2) {
             do player1.moveDown();
         }
+        //do Sys.wait(5);
         return;
     }
 
-    method void movePlayer2() {
-      if (player2direction = 1) {
-          do player2.moveUp();
-      }
-      if (player2direction = 2) {
-          do player2.moveDown();
-      }
-      return;
-    }
+    //method void movePlayer2() {
+    //  if (player2direction = 1) {
+    //      do player2.moveUp();
+    //  }
+    //  if (player2direction = 2) {
+    //      do player2.moveDown();
+    //  }
+    //  return;
+    //}
 
     method void moveCircle() {
       if (circle_direction = 1) {
-        do circle.moveUp();
+        do ball.moveUp();
+        do ball.moveRight();
       }
       if (circle_direction = 2) {
-          do circle.moveDown();
+          do ball.moveDown();
+          do ball.moveRight();
       }
       if (circle_direction = 3) {
-          do circle.moveLeft();
+          do ball.moveLeft();
+          do ball.moveDown();
       }
       if (circle_direction = 4) {
-          do circle.moveRight();
+          do ball.moveLeft();
+          do ball.moveUp();
       }
-
-      do Sys.wait(5); // Delays the next movement.
+      do Sys.wait(5);
       return;
     }
 }
