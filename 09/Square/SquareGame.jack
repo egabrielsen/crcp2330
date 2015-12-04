@@ -1,10 +1,5 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/09/Square/SquareGame.jack
-
 /**
- * Implements the Square Dance game.
+ * Implements the Pong Ball.
  * In this game you can move a black square around the screen and
  * change its size during the movement.
  * In the beginning, the square is located at the top-left corner
@@ -19,6 +14,7 @@ class SquareGame {
     //field Square player2;
     field Circle circle;
     field Ball ball;
+    field int score;
 
     // The square's movement direction
     field int player1direction; // 0=none,1=up,2=down,3=left,4=right
@@ -32,6 +28,7 @@ class SquareGame {
         let circle = Circle.new(200, 200, 5);
         let ball = Ball.new(20, 20, 5);
         let player1direction = 0;
+        let score = 0;
         //let player2direction = 0;
         let circle_direction = 1;
 
@@ -55,6 +52,8 @@ class SquareGame {
         let exit = false;
 
         while (~exit) {
+            do Output.moveCursor(1, 1);
+            do Output.printInt(score);
             do moveCircle();
              //waits for a key to be pressed.
             while (key = 0) {
@@ -89,23 +88,29 @@ class SquareGame {
 	}
 
     method void updateDirection() {
-      if ((ball.getX() > 400) & (circle_direction = 1)) {
+      if ((ball.getX() > (509 - ball.getSize())) & (circle_direction = 1)) {
         let circle_direction = 4;
       }
-      if ((ball.getX() > 400) & (circle_direction = 2)) {
+      if ((ball.getX() > (509 - ball.getSize())) & (circle_direction = 2)) {
         let circle_direction = 3;
       }
-      if ((ball.getY() < 30) & (circle_direction = 1)) {
+      if ((ball.getY() < 2) & (circle_direction = 1)) {
         let circle_direction = 2;
       }
-      if ((ball.getY() < 30) & (circle_direction = 4)) {
+      if ((ball.getY() < 2) & (circle_direction = 4)) {
         let circle_direction = 3;
       }
-      if ((ball.getX() < 30) & (circle_direction = 3)) {
+      if ((ball.getX() < 2) & (circle_direction = 3)) {
         let circle_direction = 2;
+        let score = score + 1;
+        do Output.moveCursor(1, 1);
+        do Output.printInt(score);
       }
-      if ((ball.getX() < 30) & (circle_direction = 4)) {
+      if ((ball.getX() < 2) & (circle_direction = 4)) {
         let circle_direction = 1;
+        let score = score + 1;
+        do Output.moveCursor(1, 1);
+        do Output.printInt(score);
       }
       if ((ball.getY() > (250 - ball.getSize())) & (circle_direction = 3)) {
         let circle_direction = 4;
