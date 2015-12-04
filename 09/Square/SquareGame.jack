@@ -16,6 +16,7 @@ class SquareGame {
 
     // The square
     field Square square;
+    field Circle circle;
 
     // The square's movement direction
     field int direction; // 0=none,1=up,2=down,3=left,4=right
@@ -23,6 +24,7 @@ class SquareGame {
     /** Constructs a new Square Game. */
     constructor SquareGame new() {
         let square = Square.new(0, 0, 30);
+        let circle = Circle.new(100, 100, 30);
         let direction = 0;
 
         return this;
@@ -78,7 +80,7 @@ class SquareGame {
                 do moveSquare();
             }
         }
-            
+
         return;
 	}
 
