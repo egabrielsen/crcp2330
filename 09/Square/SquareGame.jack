@@ -100,6 +100,12 @@ class SquareGame {
       if ((ball.getY() < 2) & (circle_direction = 4)) {
         let circle_direction = 3;
       }
+      if (((ball.getX() = (player1.getX() + 1)) & ((ball.getY() > player1.getY()) & (ball.getY() < (player1.getY() + 30)))) & circle_direction = 3) {
+        let circle_direction = 2;
+      }
+      if (((ball.getX() = (player1.getX() + 1)) & ((ball.getY() > player1.getY()) & (ball.getY() < (player1.getY() + 30)))) & circle_direction = 4) {
+        let circle_direction = 1;
+      }
       if ((ball.getX() < 2) & (circle_direction = 3)) {
         let circle_direction = 2;
         let score = score + 1;
