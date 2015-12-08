@@ -1,10 +1,5 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/09/Square/SquareGame.jack
-
 /**
- * Implements the Square Dance game.
+ * Implements the Pong Ball.
  * In this game you can move a black square around the screen and
  * change its size during the movement.
  * In the beginning, the square is located at the top-left corner
@@ -15,22 +10,34 @@
 class SquareGame {
 
     // The square
-    field Square square;
+    field Square player1;
+    //field Square player2;
+    field Ball ball;
+    field int score;
+    field boolean exit;
 
     // The square's movement direction
-    field int direction; // 0=none,1=up,2=down,3=left,4=right
+    field int player1direction; // 0=none,1=up,2=down,3=left,4=right
+    //field int player2direction;
+    field int circle_direction;
 
     /** Constructs a new Square Game. */
     constructor SquareGame new() {
-        let square = Square.new(0, 0, 30);
-        let direction = 0;
-
+        let player1 = Square.new(20, 100, 30);
+        //let player2 = Square.new(480, 200, 50);
+        let ball = Ball.new(100, 100, 5);
+        let player1direction = 0;
+        let score = 0;
+        //let player2direction = 0;
+        let circle_direction = 1;
+        let exit = false;
         return this;
     }
 
     /** Deallocates the object's memory. */
     method void dispose() {
-        do square.dispose();
+        do player1.dispose();
+        do circle.dispose();
         do Memory.deAlloc(this);
         return;
     }
@@ -39,65 +46,145 @@ class SquareGame {
      *  the square's movement, direction and size. */
     method void run() {
         var char key;
-        var boolean exit;
-
-        let exit = false;
+        do Output.moveCursor(1, 1);
+        do Output.printString("Score: ");
+        do Output.moveCursor(1, 25);
+        do Output.printString("PLAY PONG!");
+        do Screen.drawLine(1, 39, 509, 39);
 
         while (~exit) {
-            // waits for a key to be pressed.
+            do moveCircle();
+             //waits for a key to be pressed.
             while (key = 0) {
+                do updateDirection();
                 let key = Keyboard.keyPressed();
-                do moveSquare();
+                do moveCircle();
             }
 
             if (key = 81) {
                 let exit = true;
             }
-            if (key = 90) {
-                do square.decSize();
-            }
-            if (key = 88) {
-                do square.incSize();
-            }
             if (key = 131) {
-                let direction = 1;
+                let player1direction = 1;
             }
             if (key = 133) {
-                let direction = 2;
+                let player1direction = 2;
             }
-            if (key = 130) {
-                let direction = 3;
-            }
-            if (key = 132) {
-                let direction = 4;
-            }
+
+            do updateDirection();
 
             // waits for the key to be released.
             while (~(key = 0)) {
+                do updateDirection();
                 let key = Keyboard.keyPressed();
-                do moveSquare();
+                do movePlayer1();
+                //do movePlayer2();
+                do moveCircle();
             }
         }
-            
+
         return;
 	}
 
-    /** Moves the square by 2 pixels in the current direction. */
-    method void moveSquare() {
-        if (direction = 1) {
-            do square.moveUp();
-        }
-        if (direction = 2) {
-            do square.moveDown();
-        }
-        if (direction = 3) {
-            do square.moveLeft();
-        }
-        if (direction = 4) {
-            do square.moveRight();
-        }
+    method void updateDirection() {
+      if ((ball.getX() > (509 - ball.getSize())) & (circle_direction = 1)) {
+        let circle_direction = 4;
+      }
+      if ((ball.getX() > (509 - ball.getSize())) & (circle_direction = 2)) {
+        let circle_direction = 3;
+      }
+      if ((ball.getY() < 41) & (circle_direction = 1)) {
+        let circle_direction = 2;
+      }
+      if ((ball.getY() < 41) & (circle_direction = 4)) {
+        let circle_direction = 3;
+      }
+      if (((ball.getX() = (player1.getX() + 1)) & ((ball.getY() > player1.getY()) & (ball.getY() < (player1.getY() + 30)))) & circle_direction = 3) {
+        let circle_direction = 2;
+        let score = score + 1;
+        do Output.moveCursor(1, 8);
+        do Output.printInt(score);
+        do ifLost();
+      }
+      if (((ball.getX() = (player1.getX() + 1)) & ((ball.getY() > player1.getY()) & (ball.getY() < (player1.getY() + 30)))) & circle_direction = 4) {
+        let circle_direction = 1;
+        let score = score + 1;
+        do Output.moveCursor(1, 8);
+        do Output.printInt(score);
+        do ifLost();
+      }
+      if ((ball.getX() < 2) & (circle_direction = 3)) {
+        let circle_direction = 2;
+        let score = score - 1;
+        do Output.moveCursor(1, 8);
+        do Output.printInt(score);
+        do ifLost();
+      }
+      if ((ball.getX() < 2) & (circle_direction = 4)) {
+        let circle_direction = 1;
+        let score = score - 1;
+        do Output.moveCursor(1, 8);
+        do Output.printInt(score);
+        do ifLost();
+      }
+      if ((ball.getY() > (250 - ball.getSize())) & (circle_direction = 3)) {
+        let circle_direction = 4;
+      }
+      if ((ball.getY() > (250 - ball.getSize())) & (circle_direction = 2)) {
+        let circle_direction = 1;
+      }
 
-        do Sys.wait(5); // Delays the next movement.
+      return;
+    }
+
+    /** Moves the square by 2 pixels in the current direction. */
+    method void movePlayer1() {
+        if (player1direction = 1) {
+            do player1.moveUp();
+        }
+        if (player1direction = 2) {
+            do player1.moveDown();
+        }
+        //do Sys.wait(5);
         return;
+    }
+
+    method void ifLost() {
+      if (score = -1) {
+        do Output.moveCursor(10, 10);
+        do Output.printString("GAME OVER");
+      }
+      return;
+    }
+
+    //method void movePlayer2() {
+    //  if (player2direction = 1) {
+    //      do player2.moveUp();
+    //  }
+    //  if (player2direction = 2) {
+    //      do player2.moveDown();
+    //  }
+    //  return;
+    //}
+
+    method void moveCircle() {
+      if (circle_direction = 1) {
+        do ball.moveUp();
+        do ball.moveRight();
+      }
+      if (circle_direction = 2) {
+          do ball.moveDown();
+          do ball.moveRight();
+      }
+      if (circle_direction = 3) {
+          do ball.moveLeft();
+          do ball.moveDown();
+      }
+      if (circle_direction = 4) {
+          do ball.moveLeft();
+          do ball.moveUp();
+      }
+      do Sys.wait(5);
+      return;
     }
 }
