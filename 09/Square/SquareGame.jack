@@ -12,9 +12,9 @@ class SquareGame {
     // The square
     field Square player1;
     //field Square player2;
-    field Circle circle;
     field Ball ball;
     field int score;
+    field boolean exit;
 
     // The square's movement direction
     field int player1direction; // 0=none,1=up,2=down,3=left,4=right
@@ -25,13 +25,12 @@ class SquareGame {
     constructor SquareGame new() {
         let player1 = Square.new(20, 100, 30);
         //let player2 = Square.new(480, 200, 50);
-        let circle = Circle.new(200, 200, 5);
-        let ball = Ball.new(20, 20, 5);
+        let ball = Ball.new(100, 100, 5);
         let player1direction = 0;
         let score = 0;
         //let player2direction = 0;
         let circle_direction = 1;
-
+        let exit = false;
         return this;
     }
 
@@ -47,13 +46,13 @@ class SquareGame {
      *  the square's movement, direction and size. */
     method void run() {
         var char key;
-        var boolean exit;
-
-        let exit = false;
+        do Output.moveCursor(1, 1);
+        do Output.printString("Score: ");
+        do Output.moveCursor(1, 25);
+        do Output.printString("PLAY PONG!");
+        do Screen.drawLine(1, 39, 509, 39);
 
         while (~exit) {
-            do Output.moveCursor(1, 1);
-            do Output.printInt(score);
             do moveCircle();
              //waits for a key to be pressed.
             while (key = 0) {
@@ -94,29 +93,39 @@ class SquareGame {
       if ((ball.getX() > (509 - ball.getSize())) & (circle_direction = 2)) {
         let circle_direction = 3;
       }
-      if ((ball.getY() < 2) & (circle_direction = 1)) {
+      if ((ball.getY() < 41) & (circle_direction = 1)) {
         let circle_direction = 2;
       }
-      if ((ball.getY() < 2) & (circle_direction = 4)) {
+      if ((ball.getY() < 41) & (circle_direction = 4)) {
         let circle_direction = 3;
       }
       if (((ball.getX() = (player1.getX() + 1)) & ((ball.getY() > player1.getY()) & (ball.getY() < (player1.getY() + 30)))) & circle_direction = 3) {
         let circle_direction = 2;
+        let score = score + 1;
+        do Output.moveCursor(1, 8);
+        do Output.printInt(score);
+        do ifLost();
       }
       if (((ball.getX() = (player1.getX() + 1)) & ((ball.getY() > player1.getY()) & (ball.getY() < (player1.getY() + 30)))) & circle_direction = 4) {
         let circle_direction = 1;
+        let score = score + 1;
+        do Output.moveCursor(1, 8);
+        do Output.printInt(score);
+        do ifLost();
       }
       if ((ball.getX() < 2) & (circle_direction = 3)) {
         let circle_direction = 2;
-        let score = score + 1;
-        do Output.moveCursor(1, 1);
+        let score = score - 1;
+        do Output.moveCursor(1, 8);
         do Output.printInt(score);
+        do ifLost();
       }
       if ((ball.getX() < 2) & (circle_direction = 4)) {
         let circle_direction = 1;
-        let score = score + 1;
-        do Output.moveCursor(1, 1);
+        let score = score - 1;
+        do Output.moveCursor(1, 8);
         do Output.printInt(score);
+        do ifLost();
       }
       if ((ball.getY() > (250 - ball.getSize())) & (circle_direction = 3)) {
         let circle_direction = 4;
@@ -138,6 +147,14 @@ class SquareGame {
         }
         //do Sys.wait(5);
         return;
+    }
+
+    method void ifLost() {
+      if (score = -1) {
+        do Output.moveCursor(10, 10);
+        do Output.printString("GAME OVER");
+      }
+      return;
     }
 
     //method void movePlayer2() {
