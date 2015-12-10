@@ -42,7 +42,7 @@ class Assembler
 					line.gsub! /R[\d]+/, line[2..-1]
 				elsif labels.has_key?(line[1..-1])
 					line.gsub! line[1..-1], labels[line[1..-1]].to_s
-				elsif not line.match(/@\d+/)
+				elsif !line.match(/@\d+/)
 					labels[line[1..-1]] = 16 + numVariables
 					line.gsub! line[1..-1], labels[line[1..-1]].to_s
 					numVariables += 1
