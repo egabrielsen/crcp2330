@@ -1,5 +1,18 @@
 #! /usr/bin/env ruby
 
+class Assembler
+
+  def initialize(asm_file, hack_file)
+    @asm_file = asm_file
+    @hack_file = hack_file
+  end
+
+  def assemble!
+    puts @asm_file.read
+  end
+
+end
+
 def args_valid?
   ARGV[0] && ARGV[0].end_with?(".asm") && ARGV.length == 1
 end
@@ -25,8 +38,8 @@ unless is_readable?(asm_filename)
 end
 
 File.open(asm_filename) do |asm_file|
-  File.open(hach_filename(asm_filename), 'w') do |hack_file|
-    assembler = Assembler.new(asm_filename, hack_file)
+  File.open(hack_filename(asm_filename), 'w') do |hack_file|
+    assembler = Assembler.new(asm_file, hack_file)
     assembler.assemble!
   end
 end
