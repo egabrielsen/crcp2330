@@ -18,7 +18,13 @@ unless is_readable?(asm_filename)
   abort("#{asm_filename} is not readable or is not found")
 end
 
-puts "The contents of #{asm_filename}"
-asm_file = File.open(asm_filename)
-
-puts asm_file.read
+File.open(asm_filename) do |asm_file|
+  asm_basename = File.basename(asm_filename, '.asm')
+  path = File.split(asm_filename)[0]
+  hack_filename = "#{path}/#{asm_basename}.hack"
+  puts hack_filename
+  File.open(hach_filename, 'w') do |hack_file|
+    assembler = Assembler.new(asm_filename, hack_file)
+    assembler.assemble!
+  end
+end
