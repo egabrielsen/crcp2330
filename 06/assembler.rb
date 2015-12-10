@@ -1,5 +1,3 @@
-#! /usr/bin/env ruby
-
 require_relative 'parser'
 
 class Assembler
@@ -34,38 +32,38 @@ class Assembler
       line.strip!
     end
     lines.delete("")
+    labels = get_labels(lines)
+		numVariables = 0
+		lines.each do |line|
+			if line.include?('(')
+				line.gsub! /.+/, ''
+			elsif line.include?('@')
+				if line.match(/R[\d]{1,2}/)
+					line.gsub! /R[\d]+/, line[2..-1]
+				elsif labels.has_key?(line[1..-1])
+					line.gsub! line[1..-1], labels[line[1..-1]].to_s
+				elsif not line.match(/@\d+/)
+					labels[line[1..-1]] = 16 + numVariables
+					line.gsub! line[1..-1], labels[line[1..-1]].to_s
+					numVariables += 1
+				end
+			end
+		end
+		lines.delete('')
     return lines
   end
 
-end
+  def get_labels(lines)
+		lineNum = 0
+		numLabels = 0
+		lines.each do |line|
+			if line.include?('(')
+				LABELS[line[1..-2]] = lineNum - numLabels
+				numLabels += 1
+			end
+			lineNum += 1
+		end
+		LABELS
+	end
 
-def args_valid?
-  ARGV[0] && ARGV[0].end_with?(".asm") && ARGV.length == 1
-end
-
-def is_readable?(file)
-  File.readable?(file)
-end
-
-def hack_filename(asm_filename)
-  asm_basename = File.basename(asm_filename, '.asm')
-  path = File.split(asm_filename)[0]
-  return "#{path}/#{asm_basename}.hack"
-end
-
-unless args_valid?
-  abort("Usage: ./assember.rb Prog.asm")
-end
-
-asm_filename = ARGV[0]
-
-unless is_readable?(asm_filename)
-  abort("#{asm_filename} is not readable or is not found")
-end
-
-File.open(asm_filename) do |asm_file|
-  File.open(hack_filename(asm_filename), 'w') do |hack_file|
-    assembler = Assembler.new(asm_file, hack_file)
-    assembler.assemble!
-  end
 end

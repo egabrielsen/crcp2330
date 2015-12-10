@@ -4,6 +4,7 @@ class Parser
   def initialize(assembly_instructions)
     @assembly_instructions = assembly_instructions
     @machine_instructions = []
+    @coder = Code.new()
   end
 
   def parse!
@@ -24,25 +25,17 @@ class Parser
 
   def assemble_c_command(instruction)
     command = "111"
-		if instruction.include? '='
+		if instruction.include?('=')
 			@instructionSegments = instruction.split('=')
-			command << @coder.comp(@instructionSegments[1])
-			command << @coder.dest(@instructionSegments[0])
-			command << '000'
-		else instruction.include? ';'
+			command << @coder.comp(@instructionSegments[1]) << @coder.dest(@instructionSegments[0]) << '000'
+		else instruction.include?(';')
 			@instructionSegments = instruction.split(';')
-			command << @coder.comp(@instructionSegments[0])
-			command << '000'
-			command << @coder.jump(@instructionSegments[1])
+			command << @coder.comp(@instructionSegments[0]) << '000' << @coder.jmp(@instructionSegments[1])
 		end
   end
 
   def constant(value)
     "%015b" % value
-  end
-
-  def assemble_c_command(instruction)
-    command = "111"
   end
 
   def command_type(instruction)
@@ -51,4 +44,5 @@ class Parser
 		else
 			return :c_command
 		end
+  end
 end
