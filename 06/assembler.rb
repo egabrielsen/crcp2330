@@ -19,3 +19,6 @@ unless is_readable?(asm_filename)
 end
 
 puts "The contents of #{asm_filename}"
+asm_file = File.open(asm_filename)
+
+puts asm_file.read
